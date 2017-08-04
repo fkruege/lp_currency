@@ -29,10 +29,6 @@ class LPApp : Application(), HasActivityInjector {
     }
 
 
-//    override fun activityInjector(): AndroidInjector<Activity> {
-//        return dispatchingActivityInjector
-//    }
-
     override fun activityInjector(): DispatchingAndroidInjector<Activity> {
         return dispatchingActivityInjector
     }

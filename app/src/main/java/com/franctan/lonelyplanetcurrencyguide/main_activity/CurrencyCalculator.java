@@ -24,7 +24,6 @@ class CurrencyCalculator {
 
     boolean areEqual(double currency1, double currency2) {
         return Math.abs(currency1 - currency2) <= 0.001;
-//        return Double.compare(currency1, currency2) == 0;
     }
 
 

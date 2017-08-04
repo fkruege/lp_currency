@@ -148,19 +148,4 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner, HasSupportFrag
         })
     }
 
-//    val primaryTextWatcher :  TextWatcher{
-//        override fun afterTextChanged(p0: Editable?) {
-//            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//        }
-//
-//        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//        }
-//
-//        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//        }
-//    }
-
-
 }

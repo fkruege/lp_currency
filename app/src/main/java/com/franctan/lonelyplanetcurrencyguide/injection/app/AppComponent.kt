@@ -14,8 +14,6 @@ import javax.inject.Singleton
         AndroidInjectionModule::class
         , AppModule::class
         , NetworkingModule::class
-//        , DatabaseModule::class
-//        , RepositoryModule::class
         , MainActivityModule::class
 ))
 interface AppComponent {
@@ -23,7 +21,6 @@ interface AppComponent {
     interface Builder {
         @BindsInstance fun application(application: LPApp): Builder
         fun networkingModule(networkingModule: NetworkingModule): Builder
-        //        fun databaseModule(databaseModule: DatabaseModule): Builder
         fun build(): AppComponent
     }
 
