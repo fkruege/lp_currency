@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import com.franctan.lonelyplanetcurrencyguide.R
 import com.franctan.lonelyplanetcurrencyguide.models.CurrencyValueModel
@@ -41,6 +43,10 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner, HasSupportFrag
         initializeViews()
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     override fun getLifecycle(): LifecycleRegistry {
         return lifecycleRegistry
     }
@@ -56,28 +62,84 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner, HasSupportFrag
     }
 
     fun observeViewModels() {
-        observePrimaryCurrency()
-        observeSecondaryCurrency()
+        createObservers()
+        addPrimaryObserver()
+        addSecondaryObserver()
+        hookPrimaryFocusEventsToObserver()
+        hookSecondaryFocusEventsToObserver()
     }
 
-    fun observePrimaryCurrency() {
-        viewModel.primaryCurrency.observe(this, Observer<CurrencyValueModel> { currencyModel ->
-            btnPrimaryCurrency.text = currencyModel!!.currency
-            val saveIndex = txtPrimaryCurrency.selectionStart
-            txtPrimaryCurrency.setText(currencyModel!!.valueAsString(), TextView.BufferType.EDITABLE)
-            txtPrimaryCurrency.setSelection(saveIndex)
-        })
+    fun createObservers() {
+
+        primaryCurrencyObserver = Observer<CurrencyValueModel> { model ->
+            if (model != null && model != txtPrimaryCurrency.tag) {
+                btnPrimaryCurrency.text = model.currency
+                setText(model.valueAsString(), txtPrimaryCurrency)
+                txtPrimaryCurrency.tag = model
+            }
+        }
+
+
+        secondaryCurrencyObserver = Observer<CurrencyValueModel> { model ->
+            if (model != null && model != txtSecondaryCurrency.tag) {
+                btnSecondaryCurrency.text = model.currency
+                setText(model.valueAsString(), txtSecondaryCurrency)
+                txtSecondaryCurrency.tag = model
+            }
+        }
+    }
+
+    fun setText(newValue: String, editText: EditText) {
+        val saveIndex = editText.selectionStart
+        editText.setText(newValue, TextView.BufferType.EDITABLE)
+        if (saveIndex >= 0 && saveIndex < newValue.length) {
+            editText.setSelection(saveIndex)
+        }
+    }
+
+    lateinit var primaryCurrencyObserver: Observer<CurrencyValueModel>
+    lateinit var secondaryCurrencyObserver: Observer<CurrencyValueModel>
+
+    fun hookPrimaryFocusEventsToObserver() {
+        txtPrimaryCurrency.onFocusChangeListener =
+                View.OnFocusChangeListener { p0, hasFocus ->
+                    if (hasFocus) {
+                        removePrimaryObserver()
+                    } else {
+                        addPrimaryObserver()
+                    }
+                }
     }
 
 
-    fun observeSecondaryCurrency() {
-        viewModel.secondaryCurrency.observe(this, Observer<CurrencyValueModel> { currencyModel ->
-            btnSecondaryCurrency.text = currencyModel!!.currency
-            val saveIndex = txtSecondaryCurrency.selectionStart
-            txtSecondaryCurrency.setText(currencyModel!!.valueAsString(), TextView.BufferType.EDITABLE)
-            txtSecondaryCurrency.setSelection(saveIndex)
-        })
+    fun hookSecondaryFocusEventsToObserver() {
+        txtSecondaryCurrency.onFocusChangeListener =
+                View.OnFocusChangeListener { p0, hasFocus ->
+                    if (hasFocus) {
+                        removeSecondaryObserver()
+                    } else {
+                        addSecondaryObserver()
+                    }
+                }
     }
+
+    fun addPrimaryObserver() {
+        viewModel.primaryCurrency.observe(this@MainActivity, primaryCurrencyObserver)
+    }
+
+    fun addSecondaryObserver() {
+        viewModel.secondaryCurrency.observe(this, secondaryCurrencyObserver)
+    }
+
+    fun removePrimaryObserver() {
+        viewModel.primaryCurrency.removeObserver(primaryCurrencyObserver)
+    }
+
+
+    fun removeSecondaryObserver() {
+        viewModel.secondaryCurrency.removeObserver(secondaryCurrencyObserver)
+    }
+
 
     fun setListenerEvents() {
         setPrimaryCurrency_InputEvents()
@@ -86,40 +148,46 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner, HasSupportFrag
     }
 
     fun setPrimaryCurrency_InputEvents() {
+        btnPrimaryCurrency.isFocusable = true
         btnPrimaryCurrency.setOnClickListener {
+            txtPrimaryCurrency.clearFocus()
+            btnPrimaryCurrency.requestFocus()
             viewModel.openCurrencyChooserFor(MainViewModel.WHICH_CURRENCY.PRIMARY)
         }
 
     }
 
     fun setSecondaryCurrency_InputEvents() {
+        btnSecondaryCurrency.isFocusable = true
         btnSecondaryCurrency.setOnClickListener {
+            txtSecondaryCurrency.clearFocus()
+            btnSecondaryCurrency.requestFocus()
             viewModel.openCurrencyChooserFor(MainViewModel.WHICH_CURRENCY.SECONDARY)
         }
     }
 
-    fun initTextWatchers(){
+    fun initTextWatchers() {
         createWatchers()
         addPrimaryTextWatcher()
         addSecondaryTextWatcher()
     }
 
 
-    fun addPrimaryTextWatcher(){
-       txtPrimaryCurrency.addTextChangedListener(primaryTextWatcher)
+    fun addPrimaryTextWatcher() {
+        txtPrimaryCurrency.addTextChangedListener(primaryTextWatcher)
     }
 
-    fun addSecondaryTextWatcher(){
+    fun addSecondaryTextWatcher() {
         txtSecondaryCurrency.addTextChangedListener(secondaryTextWatcher)
     }
 
     fun createWatchers() {
 
         primaryTextWatcher = object : TextWatcher {
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun onTextChanged(input: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun afterTextChanged(input: Editable?) {
@@ -128,10 +196,10 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner, HasSupportFrag
         }
 
         secondaryTextWatcher = object : TextWatcher {
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun onTextChanged(input: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun afterTextChanged(input: Editable?) {

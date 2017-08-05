@@ -189,6 +189,7 @@ public class MainViewModel extends ViewModel {
     public void primaryCurrencyChanged(String input) {
         try {
             double newValue = Double.parseDouble(input);
+            updatePrimary(newValue);
 
             if (currencyMap.size() == 0) {
                 return;
@@ -197,10 +198,11 @@ public class MainViewModel extends ViewModel {
             CurrencyEqualizer equalizer = getCurrencyEqualizer();
             CurrencyValueModel updated = equalizer.equalizeUsingPrimary(newValue);
             if (!calculator.areEqual(secondaryCurrency.getValue().getValue(), updated.getValue())) {
-                secondaryCurrency.setValue(updated);
+                updateSecondary(updated);
             }
+
         } catch (Exception ex) {
-            Log.d(TAG, "Invalid input entered: " + input);
+            Log.e(TAG, "Primary Invalid input entered: " + input, ex);
         }
     }
 
@@ -208,6 +210,7 @@ public class MainViewModel extends ViewModel {
     public void secondaryCurrencyChanged(String input) {
         try {
             double newValue = Double.parseDouble(input);
+            updateSecondary(newValue);
 
             if (currencyMap.size() == 0) {
                 return;
@@ -216,13 +219,33 @@ public class MainViewModel extends ViewModel {
             CurrencyEqualizer equalizer = getCurrencyEqualizer();
             CurrencyValueModel updated = equalizer.equalizeUsingSecondary(newValue);
             if (!calculator.areEqual(primaryCurrency.getValue().getValue(), updated.getValue())) {
-                primaryCurrency.setValue(updated);
+                updatePrimary(updated);
             }
 
 
         } catch (Exception ex) {
-            Log.d(TAG, "Invalid input entered: " + input);
+            Log.e(TAG, "Secondary Invalid input entered: " + input, ex);
         }
+    }
+
+    private void updatePrimary(double newValue){
+        CurrencyValueModel current = primaryCurrency.getValue();
+        updatePrimary(current.setValue(newValue));
+    }
+
+
+    private void updateSecondary(double newValue){
+        CurrencyValueModel current = secondaryCurrency.getValue();
+        updateSecondary(current.setValue(newValue));
+    }
+
+    private void updatePrimary(CurrencyValueModel model){
+       primaryCurrency.setValue(model);
+    }
+
+
+    private void updateSecondary(CurrencyValueModel model){
+       secondaryCurrency.setValue(model);
     }
 
     public MutableLiveData<CurrencyValueModel> getSecondaryCurrency() {
