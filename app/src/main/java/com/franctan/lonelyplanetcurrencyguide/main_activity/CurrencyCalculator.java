@@ -8,14 +8,14 @@ import java.math.RoundingMode;
 
 import javax.inject.Inject;
 
-class CurrencyCalculator {
+public class CurrencyCalculator {
 
     @Inject
-    CurrencyCalculator() {
+    public CurrencyCalculator() {
 
     }
 
-    double calculateFromBase(CurrencyValueModel baseCurrency, CurrencyValueModel otherCurrency, double value) {
+    public double calculateFromBase(CurrencyValueModel baseCurrency, CurrencyValueModel otherCurrency, double value) {
         double conversion = baseCurrency.getValue() * otherCurrency.getValue();
         return roundIt(conversion * value);
     }
@@ -31,6 +31,10 @@ class CurrencyCalculator {
 
     private double roundIt(double value) {
         return new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    public boolean dummyMock(){
+       return true;
     }
 
 

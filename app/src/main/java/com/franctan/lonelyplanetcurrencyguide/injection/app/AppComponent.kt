@@ -1,5 +1,6 @@
 package com.franctan.lonelyplanetcurrencyguide.injection.app
 
+import android.app.Application
 import com.franctan.lonelyplanetcurrencyguide.LPApp
 import com.franctan.lonelyplanetcurrencyguide.main_activity.injection.MainActivityModule
 import com.franctan.lonelyplanetcurrencyguide.networking.NetworkingModule
@@ -19,11 +20,11 @@ import javax.inject.Singleton
 interface AppComponent {
     @Component.Builder
     interface Builder {
-        @BindsInstance fun application(application: LPApp): Builder
+        @BindsInstance fun application(application: Application): Builder
         fun networkingModule(networkingModule: NetworkingModule): Builder
         fun build(): AppComponent
     }
 
-    fun app(): LPApp
+    fun app(): Application
     fun inject(app: LPApp)
 }

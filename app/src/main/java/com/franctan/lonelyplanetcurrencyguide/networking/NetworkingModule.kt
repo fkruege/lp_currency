@@ -1,5 +1,6 @@
 package com.franctan.lonelyplanetcurrencyguide.networking
 
+import android.app.Application
 import com.franctan.lonelyplanetcurrencyguide.LPApp
 import com.franctan.lonelyplanetcurrencyguide.networking.adapters.CurrencyConversionRatesModelAdapter
 import com.squareup.moshi.Moshi
@@ -19,7 +20,7 @@ class NetworkingModule constructor(val baseUrl: String) {
 
     @Provides
     @Singleton
-    fun provideOkHttpCache(application: LPApp): Cache {
+    fun provideOkHttpCache(application: Application): Cache {
         val cacheSize = 10L * 1024L * 1024L
         val cache = Cache(application.cacheDir, cacheSize)
         return cache

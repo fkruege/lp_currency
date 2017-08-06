@@ -7,6 +7,7 @@ project.ext {
 
     dagger = "2.11"
     retrofit = "2.3.0"
+    mockito = "2.8.47"
 
     support= '26.0.0'
 }
