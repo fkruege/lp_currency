@@ -57,16 +57,17 @@ class MainActivityTest {
     }
 
     @Test
-    fun verifyInitialValues() {
+    fun verifyInitialValuesAndThenUpdate() {
         Assert.assertSame(viewModel, activityRule.activity.viewModel)
 
         verifyPrimaryCurrency()
         verifySecondaryCurrency()
 
-        primary = CurrencyValueModel("PHP", 50.0)
-        primaryLiveData.postValue(primary)
+        updatePrimaryCurrency(CurrencyValueModel("PHP", 50.0))
+        updateSecondaryCurrency(CurrencyValueModel("CAN", 25.0))
 
         verifyPrimaryCurrency()
+        verifySecondaryCurrency()
     }
 
     private fun verifyPrimaryCurrency() {
@@ -77,6 +78,16 @@ class MainActivityTest {
     private fun verifySecondaryCurrency() {
         viewContainsText(R.id.btnSecondaryCurrency, secondary.currency)
         viewContainsText(R.id.txtSecondaryCurrency, secondary.valueAsString())
+    }
+
+    private fun updatePrimaryCurrency(model: CurrencyValueModel) {
+        primary = model
+        primaryLiveData.postValue(primary)
+    }
+
+    private fun updateSecondaryCurrency(model: CurrencyValueModel) {
+        secondary = model
+        secondaryLiveData.postValue(secondary)
     }
 
     fun viewContainsText(@IdRes viewId: Int, text: String) {
