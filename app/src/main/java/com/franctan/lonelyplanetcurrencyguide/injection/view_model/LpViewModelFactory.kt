@@ -13,7 +13,6 @@ import javax.inject.Singleton
 class LpViewModelFactory
 @Inject constructor(val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>) : ViewModelProvider.Factory {
 
-
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         var creator: Provider<ViewModel>? = creators[modelClass]
         if (creator == null) {

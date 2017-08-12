@@ -15,7 +15,9 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.franctan.lonelyplanetcurrencyguide.test_support.MockTestRunner"
+//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -37,6 +39,7 @@ dependencies {
 //    compile fileTree(dir: 'libs', include: ['*.jar'])
 //    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
+    implementation "com.android.support:support-annotations:$support"
     implementation "com.android.support:appcompat-v7:$support"
     implementation "com.android.support:cardview-v7:$support"
     implementation "com.android.support:recyclerview-v7:$support"
@@ -63,6 +66,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 
     //rxjava
+
     implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
@@ -80,6 +84,7 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestImplementation 'com.android.support.test:runner:1.0.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

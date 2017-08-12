@@ -1,7 +1,10 @@
 package com.franctan.lonelyplanetcurrencyguide
 
 import android.app.Application
+import android.arch.lifecycle.ViewModelProvider
 import com.franctan.lonelyplanetcurrencyguide.main_activity.CurrencyCalculator
+import com.franctan.lonelyplanetcurrencyguide.main_activity.MainViewModel
+import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito.*
 
@@ -21,4 +24,16 @@ class ExampleUnitTest {
         val mock = mock(CurrencyCalculator::class.java)
         `when`(mock.dummyMock()).thenReturn(false)
     }
+
+    @Test
+    fun testFactory() {
+        val vm = mock(MainViewModel::class.java)
+        val factory = mock(ViewModelProvider.Factory::class.java)
+        `when`(factory.create(eq(MainViewModel::class.java))).thenReturn(vm)
+        val result = factory.create(MainViewModel::class.java)
+        assertSame(result, vm)
+    }
+
+
+
 }

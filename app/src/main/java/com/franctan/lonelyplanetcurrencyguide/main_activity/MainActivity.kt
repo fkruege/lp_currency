@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner, HasSupportFrag
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
-
         setContentView(R.layout.activity_main)
 
         initializeViews()

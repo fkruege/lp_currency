@@ -45,9 +45,7 @@ public class MainViewModel extends ViewModel {
 
     private MutableLiveData<CurrencyValueModel> secondaryCurrency;
 
-
     private final SingleLiveEvent<Void> openCurrencyChooserEvent = new SingleLiveEvent<>();
-
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -71,6 +69,7 @@ public class MainViewModel extends ViewModel {
         initializeBaseAndOtherCurrencies();
         getCurrencyRatesFromRepository();
     }
+
 
     private void initializeBaseAndOtherCurrencies() {
         CurrencyValueModel defaultCurrency = new CurrencyValueModel();
