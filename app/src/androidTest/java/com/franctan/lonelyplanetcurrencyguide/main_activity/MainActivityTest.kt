@@ -52,17 +52,13 @@ class MainActivityTest {
 
     @Before
     fun setUp() {
-        val testApp = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestApp
-        testApp.daggerComponent().inject(this)
-        `when`(viewModelFactory.create(eq(MainViewModel::class.java))).thenReturn(viewModel)
-
-        setupLiveDataObjects()
-
+        mockViewModel()
+        setupLiveDataCurrencyModels()
         activityRule.launchActivity(null)
     }
 
     @Test
-    fun verifyInitialValuesAndThenUpdate() {
+    fun verifyPrimaryAndSecondaryCurrencyValues() {
         verifyPrimaryCurrency()
         verifySecondaryCurrency()
 
@@ -108,7 +104,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun verifyOrientationChanges(){
+    fun verifyOrientationChanges_UseSameModel() {
         assertSame(viewModel, activityRule.activity.viewModel)
         activityRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         assertSame(viewModel, activityRule.activity.viewModel)
@@ -135,14 +131,19 @@ class MainActivityTest {
         secondaryLiveData.postValue(secondary)
     }
 
-    fun setupLiveDataObjects() {
+    fun mockViewModel() {
+        val testApp = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestApp
+        testApp.daggerComponent().inject(this)
+        `when`(viewModelFactory.create(eq(MainViewModel::class.java))).thenReturn(viewModel)
+    }
+
+    fun setupLiveDataCurrencyModels() {
         primaryLiveData.postValue(primary)
         secondaryLiveData.postValue(secondary)
 
         `when`(viewModel.primaryCurrency).thenReturn(primaryLiveData)
         `when`(viewModel.secondaryCurrency).thenReturn(secondaryLiveData)
         `when`(viewModel.openCurrencyChooserListener()).thenReturn(openCurrencyChooserListener)
-
     }
 
 }
