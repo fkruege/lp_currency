@@ -1,15 +1,9 @@
 package com.franctan.lonelyplanetcurrencyguide;
 
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+//import static android.support.test.espresso.action.ViewActions.typeText;
 
-import android.support.test.espresso.Espresso;
-import android.support.test.runner.AndroidJUnit4;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+//import static android.support.test.espresso.action.ViewActions.click;
 
 public class JavaTest {
 
@@ -17,7 +11,11 @@ public class JavaTest {
 //        Espresso.w
 
 //    onView(withId(1)).check(matches())
-
+//verify()
+//times()
+//typeText()
+//click()
+//assertSame()
     }
 
 
